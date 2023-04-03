@@ -2,34 +2,33 @@ import React, {Component} from 'react';
 import {View, Text, Image, StyleSheet, Button, Alert} from 'react-native';
 
 class App extends React.Component<any, any> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      nome: '',
-    };
-    this.entrar = this.entrar.bind(this);
-  }
-
-  entrar(nome:string){
-    this.setState({
-      nome:nome
-    })
-  }
-
-
   render() {
     return (
-      <View style={{marginTop: 30}}>
-        <Text>Ola {this.state.nome}</Text>
+      <View style={styles.container}>
+        <Text style={styles.titulo}>Eu sou texto 1</Text>
+        <Text style={[styles.titulo, styles.alinharTexto2]}>Eu sou texto 2</Text>
+        <Text style={styles.alinharTexto}>Eu sou texto 3</Text>
+        <Text>Eu sou texto 4</Text>
+        <Text>Eu sou texto 5</Text>
 
-        <Button title="Clicar aki" onPress={()=>this.entrar('eder novo')} color='red'/>
-        <Button title="Click aki" color='green'   onPress={() => {
-           this.setState({
-            nome:'sem nome'
-          })
-        }} />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container:{
+    marginTop:40,
+  },
+  titulo:{
+    fontSize:25,
+    color:'red'
+  },
+  alinharTexto:{
+    textAlign:'center'
+  },
+  alinharTexto2:{
+    textAlign:'right'
+  }
+})
 export default App;
