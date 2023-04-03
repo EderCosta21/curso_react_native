@@ -14,22 +14,19 @@ class App extends React.Component<any, any> {
     super(props);
     this.state = {
       nome: '',
+      input:''
     };
 
-    this.getNome = this.getNome.bind(this);
+    this.entrar = this.entrar.bind(this);
   }
-  getNome(texto: string) {
-    if(texto.length>0)
-    {
-      this.setState({nome: 'Bem vindo '+texto});
-    }else{
-      this.setState({nome: ''});
-    }
+  entrar() {
+  
+      this.setState({nome: 'Bem vindo '+this.state.input});
+  
 
   }
 
   render() {
-    let value = '';
     return (
       <View style={styles.container}>
         <TextInput
@@ -38,8 +35,10 @@ class App extends React.Component<any, any> {
           keyboardType="default"
           placeholder="Digite seu nome"
           underlineColorAndroid="transparent"
-          onChangeText={this.getNome}></TextInput>
-
+          onChangeText={(texto)=>this.setState({input:texto})}
+         ></TextInput>
+          
+          <Button color={'red'}  title='Entrar' onPress={()=>this.entrar()}></Button>
         <Text style={styles.texto}>{this.state.nome}</Text>
       </View>
     );
@@ -68,6 +67,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
   },
+  button:{
+    backgroundColor:'red'
+  }
 });
 
 export default App;
