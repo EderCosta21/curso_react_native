@@ -1,104 +1,140 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
-  Button,
-  Alert,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+  Image,
+  TouchableOpacity
+  } from 'react-native';
 
-class App extends React.Component<any, any> {
-  frase: string[];
+class App extends Component<any,any>{
+  timer: any;
 
-  constructor(props: any) {
+  constructor(props:any){
     super(props);
-    {
-      this.state = {
-        textoFrase: '',
-        imgClosed: require('./src/images/biscoitofechado.png'),
-        imgOpen: require('./src/images/biscoitoaberto.png'),
-        img: require('./src/images/biscoitofechado.png'),
-      };
+    this.state = {
+      numero: 0,
+      botao: 'VAI',
+      ultimo: null
+    };
 
-      this.openBiscoito = this.openBiscoito.bind(this);
+    //Variavel do timer do relogio.
+    this.timer = null;
+
+    this.vai = this.vai.bind(this);
+    this.limpar = this.limpar.bind(this);
+  }
+
+  vai(){
+
+    if(this.timer != null){
+      //Aqui vai parar o timer
+      clearInterval(this.timer);
+      this.timer = null;
+
+      this.setState({botao: 'VAI'});
+    }else{
+
+      //Comeca girar o timer
+      this.timer = setInterval( ()=> {
+        this.setState({numero: this.state.numero + 0.1})
+      }, 100);
+
+      this.setState({botao: 'PARAR'});
     }
-    this.frase = [
-      'Tudo o que um sonho precisa para ser realizado é alguém que acredite que ele possa ser realizado',
-      'Imagine uma nova história para sua vida e acredite nela.',
-      'Não espere por uma crise para descobrir o que é importante em sua vida.',
-      'Pessimismo leva à fraqueza, otimismo ao poder.',
-      'O otimismo é a fé em ação. Nada se pode levar a efeito sem otimismo.',
-      'O otimismo é a fé em ação. Nada se pode levar a efeito sem otimismo.',
-      'Não são as nossas ideias que nos fazem otimistas ou pessimistas, mas o otimismo e o pessimismo de origem fisiológica que fazem as nossas ideias.',
-      'O contrário do pessimismo raramente é o otimismo. O contrário do pessimismo, se não é a boa intenção de injetar força nos fracos, o que é bonito e faz bem, é quase sempre a idiota.',
-      'Ser feliz sem motivo é a mais autêntica forma de felicidade.',
-      'Ser feliz sem motivo é a mais autêntica forma de felicidade.',
-      'Deve-se temer mais o amor de uma mulher do que o ódio de um homem',
-      'Tudo vale a pena quando a alma não é pequena.',
-    ];
+
   }
 
-  openBiscoito() {
-    let number = Math.floor(Math.random() * this.frase.length);
-    this.setState({textoFrase: this.frase[number], img: this.state.imgOpen});
+  limpar(){
+    if(this.timer != null){
+      //Aqui vai parar o timer
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+    this.setState({
+      ultimo: this.state.numero,
+      numero: 0,
+      botao: 'VAI'
+    })
   }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Image style={styles.img} source={this.state.img} />
-        <Text style={styles.textoFrase}> {this.state.textoFrase}</Text>
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => {
-            this.openBiscoito();
-          }}>
-          <View style={styles.btnArea}>
-            <Text style={styles.btnTexto}>Abrir Biscoito</Text>
-          </View>
+
+  render(){
+    return(
+      <View style={styles.container}>  
+
+      <Image
+      source={require('./src/images/cronometro.png')}
+      style={styles.cronometro}
+      />
+
+      <Text style={styles.timer}> {this.state.numero.toFixed(1)} </Text>
+
+      <View style={styles.btnArea}>
+
+        <TouchableOpacity style={styles.btn} onPress={this.vai}>
+          <Text style={styles.btnTexto}> {this.state.botao} </Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btn} onPress={this.limpar}>
+          <Text style={styles.btnTexto}>LIMPAR</Text>
+        </TouchableOpacity>
+
       </View>
+
+      <View style={styles.areaUltima}>
+          <Text style={styles.textoCorrida}>
+            {this.state.ultimo > 0 ? 'Ultimo tempo: ' + this.state.ultimo.toFixed(2) + 's' : ''}
+          </Text>
+      </View>
+
+
+      </View>    
     );
   }
+
 }
+
 const styles = StyleSheet.create({
-  container: {
-    margin: 20,
-    flex: 1,
-    alignItems: 'center',
+  container:{
+    flex:1,
+    alignItems:'center',
     justifyContent: 'center',
+    backgroundColor: '#00aeef'
   },
-  img: {
-    width: 250,
-    height: 250,
+  timer:{
+    marginTop:-160,
+    color: '#FFF',
+    fontSize: 65,
+    fontWeight: 'bold'
   },
-  textoFrase: {
-    fontSize: 20,
-    color: '#dd7b22',
-    margin: 20,
-    fontStyle: 'italic',
-    textAlign: 'center',
-  },
-  botao: {
-    width: 230,
-    height: 50,
-    borderWidth: 2,
-    borderColor: '#dd7b22',
-    borderRadius: 25,
-  },
-  btnArea: {
-    flex: 1,
+  btnArea:{
     flexDirection: 'row',
-    justifyContent: 'center',
+    marginTop: 70,
+    height: 40
+  },
+  btn:{
+    flex:1,
+    justifyContent:'center',
     alignItems: 'center',
+    backgroundColor: '#FFF',
+    height: 40,
+    margin: 17,
+    borderRadius: 9
   },
-  btnTexto: {
-    fontSize: 18,
-    fontWeight: '700',
-    borderColor: '#dd7b22',
+  btnTexto:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#00aeef'
   },
+  areaUltima:{
+    marginTop: 40,
+  },
+  textoCorrida:{
+    fontSize:25,
+    fontStyle:'italic',
+    color: '#FFF'
+  },
+  cronometro:{}
 });
 
 export default App;
